@@ -1,25 +1,26 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
-// Import database connection
 require('./src/config/db');
 
-// Import Route Files
 const authRoutes = require('./src/routes/authRoutes');
+const productRoutes = require('./src/routes/productRoutes');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Base Health Check
+// Serve the uploads folder publicly so the frontend can display the images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Backend Architecture is clean and running!' });
 });
 
-// Mount Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {
