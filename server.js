@@ -6,13 +6,13 @@ require('./src/config/db');
 
 const authRoutes = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
+const cartRoutes = require('./src/routes/cartRoutes');
+const checkoutRoutes = require('./src/routes/checkoutRoutes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-// Serve the uploads folder publicly so the frontend can display the images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/health', (req, res) => {
@@ -21,6 +21,8 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/checkout', checkoutRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {
