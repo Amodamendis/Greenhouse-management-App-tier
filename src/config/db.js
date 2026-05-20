@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const db = mysql.createConnection({
-    host: '127.0.0.1', 
+    host: '192.168.96.1', // Your WSL-to-Windows bridge IP
     user: 'root',      
     password: '',      
     database: 'whiteleafagrifinal'
@@ -10,10 +10,9 @@ const db = mysql.createConnection({
 db.connect((err) => {
     if (err) {
         console.error('Database connection failed:', err);
-        process.exit(1); // Stop the server if DB fails
+        process.exit(1); 
     }
     console.log('Successfully connected to the XAMPP MySQL database.');
 });
 
-// Export it so other files can run queries using this connection
 module.exports = db;
