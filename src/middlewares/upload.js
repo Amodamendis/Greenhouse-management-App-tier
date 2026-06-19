@@ -25,7 +25,10 @@ const s3Storage = multerS3({
     bucket: 'greenhouse-static-assets-619891987476',
     key: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname)); 
+        const fileName = uniqueSuffix + path.extname(file.originalname);
+        
+        // THE FIX: Add the 'uploads/' prefix right here!
+        cb(null, 'uploads/' + fileName); 
     }
 });
 
