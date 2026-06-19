@@ -1,19 +1,37 @@
 const multer = require('multer');
 const path = require('path');
+const multerS3 = require('multer-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
 
-// Configure where and how to save the incoming images
-const storage = multer.diskStorage({
+
+// ORIGINAL LOCAL STORAGE (Unharmed)
+
+const localStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Save files to our new uploads folder
+        cb(null, 'uploads/'); // Saves to local folder
     },
     filename: (req, file, cb) => {
-        // Create a unique filename: timestamp-random.ext
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-// Filter to only accept image files
+
+//  NEW AWS S3 STORAGE
+
+const s3 = new S3Client({ region: 'us-east-1' });
+const s3Storage = multerS3({
+    s3: s3,
+    bucket: 'greenhouse-static-assets-619891987476',
+    key: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname)); 
+    }
+});
+
+
+// ORIGINAL FILE FILTER (Unharmed)
+
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
         cb(null, true);
@@ -22,10 +40,16 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
+
+// THE STORAGE TOGGLE
+
+// Change this to 'localStorage' to revert back to saving on your hard drive!
+const activeStorage = s3Storage; 
+
 const upload = multer({ 
-    storage: storage,
+    storage: activeStorage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+    limits: { fileSize: 5 * 1024 * 1024 } // Your original 5MB limit
 });
 
 module.exports = upload;

@@ -4,11 +4,12 @@ const db = require('../config/db');
 exports.addProduct = (req, res) => {
     const { productname, productprice, categorynu } = req.body;
     
-    // Multer places the file info in req.file
     if (!req.file) {
         return res.status(400).json({ error: 'No image provided' });
     }
-    const imageFilename = req.file.filename;
+    
+    // SAFE FALLBACK: Works perfectly for both Local Storage AND AWS S3!
+    const imageFilename = req.file.key || req.file.filename;
 
     const query = 'INSERT INTO products (name, price, image, category) VALUES (?, ?, ?, ?)';
     db.query(query, [productname, productprice, imageFilename, categorynu], (err, result) => {
