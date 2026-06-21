@@ -19,4 +19,4 @@ COPY package*.json ./
 
 EXPOSE 4000
 
-CMD ["node", "server.js"]
+CMD ["node", "--require", "./tracing.js", "server.js"]
