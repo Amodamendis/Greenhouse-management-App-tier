@@ -15,9 +15,10 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY src/ ./src/
 COPY server.js ./
-COPY tracing.js ./ 
+COPY tracing.js ./
 COPY package*.json ./
 
 EXPOSE 4000
 
+# THE FIX: Require tracing.js before booting the server
 CMD ["node", "--require", "./tracing.js", "server.js"]

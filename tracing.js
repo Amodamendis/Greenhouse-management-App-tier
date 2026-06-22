@@ -9,13 +9,10 @@ const sdk = new NodeSDK({
   instrumentations: [getNodeAutoInstrumentations()]
 });
 
+sdk.start()
+  .then(() => console.log('OpenTelemetry initialized successfully.'))
+  .catch((error) => console.log('Error initializing OpenTelemetry', error));
 
-sdk.start();
-console.log('OpenTelemetry initialized successfully.');
-
-// Graceful shutdown
 process.on('SIGTERM', () => {
-  sdk.shutdown()
-    .then(() => console.log('OpenTelemetry terminated.'))
-    .finally(() => process.exit(0));
+  sdk.shutdown().then(() => process.exit(0));
 });
