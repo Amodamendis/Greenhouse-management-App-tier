@@ -1,9 +1,7 @@
-// tracing.js
 const { NodeSDK } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');
 
-// The exporter will automatically look for the OTEL_EXPORTER_OTLP_ENDPOINT environment variable
 const traceExporter = new OTLPTraceExporter();
 
 const sdk = new NodeSDK({
@@ -11,9 +9,9 @@ const sdk = new NodeSDK({
   instrumentations: [getNodeAutoInstrumentations()]
 });
 
-sdk.start()
-  .then(() => console.log('OpenTelemetry initialized successfully.'))
-  .catch((error) => console.log('Error initializing OpenTelemetry', error));
+
+sdk.start();
+console.log('OpenTelemetry initialized successfully.');
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
