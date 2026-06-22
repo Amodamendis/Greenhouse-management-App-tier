@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY src/ ./src/
 COPY server.js ./
+COPY tracing.js ./ 
 COPY package*.json ./
 
 EXPOSE 4000
