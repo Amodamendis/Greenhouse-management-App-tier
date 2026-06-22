@@ -9,9 +9,9 @@ const sdk = new NodeSDK({
   instrumentations: [getNodeAutoInstrumentations()]
 });
 
-sdk.start()
-  .then(() => console.log('OpenTelemetry initialized successfully.'))
-  .catch((error) => console.log('Error initializing OpenTelemetry', error));
+// THE FIX: Call start() directly without .then() or .catch()
+sdk.start();
+console.log('OpenTelemetry initialized successfully.');
 
 process.on('SIGTERM', () => {
   sdk.shutdown().then(() => process.exit(0));
